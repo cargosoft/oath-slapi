@@ -1,0 +1,124 @@
+attributetype ( 1.3.6.1.4.1.38409.2.3.1 
+	NAME 'tokenVendor' 
+	DESC 'OTP token vendor' 
+	EQUALITY caseIgnoreMatch 
+	ORDERING caseIgnoreOrderingMatch 
+	SUBSTR caseIgnoreSubstringsMatch 
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15 
+	SINGLE-VALUE 
+ )
+
+attributetype ( 1.3.6.1.4.1.38409.2.3.2 
+	NAME 'tokenModel' 
+	DESC 'OTP token model' 
+	EQUALITY caseIgnoreMatch 
+	ORDERING caseIgnoreOrderingMatch 
+	SUBSTR caseIgnoreSubstringsMatch 
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15 
+	SINGLE-VALUE 
+ )
+
+attributetype ( 1.3.6.1.4.1.38409.2.3.3 
+	NAME ( 'tSN' 'tokenSerial' ) 
+	DESC 'OTP token serial number' 
+	SUP serialNumber 
+	EQUALITY caseIgnoreMatch 
+	ORDERING caseIgnoreOrderingMatch 
+	SUBSTR caseIgnoreSubstringsMatch 
+	SINGLE-VALUE 
+ )
+
+attributetype ( 1.3.6.1.4.1.38409.2.3.4 
+	NAME 'tokenSeed' 
+	DESC 'OTP token seed (secret key)' 
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.5{32} 
+	SINGLE-VALUE 
+ )
+
+attributetype ( 1.3.6.1.4.1.38409.2.3.5 
+	NAME 'tokenCounter' 
+	DESC 'OTP token current counter value' 
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.27 
+	SINGLE-VALUE 
+ )
+
+attributetype ( 1.3.6.1.4.1.38409.2.3.6 
+	NAME 'tokenOwner' 
+	DESC 'OTP token owner' 
+	SUP distinguishedName 
+	EQUALITY distinguishedNameMatch 
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.12 
+	SINGLE-VALUE 
+ )
+
+attributetype ( 1.3.6.1.4.1.38409.2.3.7 
+	NAME 'tokenPIN' 
+	DESC 'OTP token PIN' 
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15 
+	SINGLE-VALUE 
+ )
+
+attributetype ( 1.3.6.1.4.1.38409.2.3.8 
+	NAME 'hotpLength' 
+	DESC 'HOTP one-time password length' 
+	EQUALITY integerMatch 
+	ORDERING integerOrderingMatch 
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.27 
+	SINGLE-VALUE 
+ )
+
+attributetype ( 1.3.6.1.4.1.38409.2.3.9 
+	NAME 'hotpTruncOffset' 
+	DESC 'HOTP truncation offset' 
+	EQUALITY integerMatch 
+	ORDERING integerOrderingMatch 
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.27 
+	SINGLE-VALUE 
+ )
+
+attributetype ( 1.3.6.1.4.1.38409.2.3.10 
+	NAME 'hotpChecksum' 
+	DESC 'HOTP checksum flag' 
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.27 
+	SINGLE-VALUE 
+ )
+
+attributetype ( 1.3.6.1.4.1.38409.2.3.11 
+	NAME 'hotpInnerWindow' 
+	DESC 'HOTP inner (authentication) window size' 
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.27 
+	SINGLE-VALUE 
+ )
+
+attributetype ( 1.3.6.1.4.1.38409.2.3.12 
+	NAME 'hotpOuterWindow' 
+	DESC 'HOTP outer (resynchronization) window size' 
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.27 
+	SINGLE-VALUE 
+ )
+
+attributetype ( 1.3.6.1.4.1.38409.2.3.13 
+	NAME 'oathTokens' 
+	DESC 'Base DN(s) for token searches' 
+	SUP distinguishedName 
+	EQUALITY distinguishedNameMatch 
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.12 
+ )
+
+objectclass ( 1.3.6.1.4.1.38409.2.4.1 
+	NAME 'oathToken' 
+	DESC 'OATH compliant OTP token' 
+	SUP top 
+	STRUCTURAL 
+	MUST ( tokenSeed $ tSN ) 
+	MAY ( tokenCounter $ tokenModel $ tokenOwner $ tokenVendor $ tokenPIN ) 
+ )
+
+objectclass ( 1.3.6.1.4.1.38409.2.4.2 
+	NAME 'oathConfig' 
+	DESC 'OATH plugin configuration entry' 
+	AUXILIARY 
+	MUST oathTokens 
+	MAY ( hotpChecksum $ hotpInnerWindow $ hotpLength $ hotpOuterWindow $ hotpTruncOffset ) 
+ )
+
